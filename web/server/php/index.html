@@ -125,10 +125,6 @@
           hideCanvas();
 	      setProgressBarText('Converting audio to text....');
           toggleRecording(v);
-          var oldText = document.getElementById('textArea1').innerHTML;
-          var newText = convertAudioToText();
-          alert(newText);
-          document.getElementById('textArea1').innerHTML = oldText & newText;
 	      hideProgressBar();
         }
       }

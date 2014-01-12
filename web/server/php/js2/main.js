@@ -1,19 +1,19 @@
-/*
- * Code taken and modified from: https://github.com/mattdiamond/Recorderjs
- * Release under MIT license.
- */
-/*
-Copyright © 2013 Matt Diamond
+/* Copyright 2013 Chris Wilson
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+       http://www.apache.org/licenses/LICENSE-2.0
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 */
 
-
-var audioContext = new webkitAudioContext();
+var audioContext = new AudioContext();
 var audioInput = null,
     realAudioInput = null,
     inputPoint = null,
@@ -31,31 +31,14 @@ var recIndex = 0;
 
 function saveAudio() {
     audioRecorder.exportWAV( doneEncoding );
-}
-
-function convertAudioToText(data) {
-
-    // Call the rest service here
-
-    var convertedText = "Placeholder text. ";
-
-    // return converted text
-    return convertedText;
+    // could get mono instead by saying
+    // audioRecorder.exportMonoWAV( doneEncoding );
 }
 
 function drawWave( buffers ) {
-    // var canvas = document.getElementById( "wavedisplay" );
-    // drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
-    var data = buffers[0]; // data has the audio stream
-    alert("Audio Stream Length is: " + data.length.toString());
+    var canvas = document.getElementById( "wavedisplay" );
 
-    // Call the rest service here
-    // var convertedText = convertAudioToText(data);
-    var convertedText = "Placeholder text. ";
-
-    var oldText = document.getElementById('textArea1').innerHTML;
-    alert(oldText);
-    // document.getElementById('textArea1').innerHTML = oldText & convertedText;
+    drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
 }
 
 function doneEncoding( blob ) {
@@ -79,8 +62,6 @@ function toggleRecording( e ) {
     }
 }
 
-// this is a helper function to force mono for some interfaces that return a stereo channel for a mono source.
-// it's not currently used, but probably will be in the future.
 function convertToMono( input ) {
     var splitter = audioContext.createChannelSplitter(2);
     var merger = audioContext.createChannelMerger(2);
@@ -90,22 +71,9 @@ function convertToMono( input ) {
     splitter.connect( merger, 0, 1 );
     return merger;
 }
-function toggleMono() {
-    if (audioInput != realAudioInput) {
-        audioInput.disconnect();
-        realAudioInput.disconnect();
-        audioInput = realAudioInput;
-    } else {
-        realAudioInput.disconnect();
-        audioInput = convertToMono( realAudioInput );
-    }
-
-    audioInput.connect(inputPoint);
-}
-
 
 function cancelAnalyserUpdates() {
-    window.webkitCancelAnimationFrame( rafID );
+    window.cancelAnimationFrame( rafID );
     rafID = null;
 }
 
@@ -145,12 +113,24 @@ function updateAnalysers(time) {
         }
     }
     
-    rafID = window.webkitRequestAnimationFrame( updateAnalysers );
+    rafID = window.requestAnimationFrame( updateAnalysers );
+}
+
+function toggleMono() {
+    if (audioInput != realAudioInput) {
+        audioInput.disconnect();
+        realAudioInput.disconnect();
+        audioInput = realAudioInput;
+    } else {
+        realAudioInput.disconnect();
+        audioInput = convertToMono( realAudioInput );
+    }
+
+    audioInput.connect(inputPoint);
 }
 
 function gotStream(stream) {
-    // "inputPoint" is the node to connect your output recording to.
-    inputPoint = audioContext.createGainNode();
+    inputPoint = audioContext.createGain();
 
     // Create an AudioNode from the stream.
     realAudioInput = audioContext.createMediaStreamSource(stream);
@@ -165,7 +145,7 @@ function gotStream(stream) {
 
     audioRecorder = new Recorder( inputPoint );
 
-    zeroGain = audioContext.createGainNode();
+    zeroGain = audioContext.createGain();
     zeroGain.gain.value = 0.0;
     inputPoint.connect( zeroGain );
     zeroGain.connect( audioContext.destination );
@@ -173,19 +153,17 @@ function gotStream(stream) {
 }
 
 function initAudio() {
-    navigator.getMedia = ( 
-        navigator.getUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.msGetUserMedia
-    );
-    if (!navigator.getMedia)
-        alert("Error: getUserMedia not supported!");
+        if (!navigator.getUserMedia)
+            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        if (!navigator.cancelAnimationFrame)
+            navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+        if (!navigator.requestAnimationFrame)
+            navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
-    navigator.getMedia({audio:true}, gotStream, function(e) {
-        alert('Error getting audio');
-        console.log(e);
-    });
+    navigator.getUserMedia({audio:true}, gotStream, function(e) {
+            alert('Error getting audio');
+            console.log(e);
+        });
 }
 
 window.addEventListener('load', initAudio );
