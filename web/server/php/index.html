@@ -97,6 +97,9 @@
           }
           */
 
+          alert("Submit clicked.");
+          return;
+
           var xmlhttp = new XMLHttpRequest();
           xmlhttp.onreadystatechange=function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -125,10 +128,6 @@
           hideCanvas();
 	      setProgressBarText('Converting audio to text....');
           toggleRecording(v);
-          var oldText = document.getElementById('textArea1').innerHTML;
-          var newText = convertAudioToText();
-          alert(newText);
-          document.getElementById('textArea1').innerHTML = oldText & newText;
 	      hideProgressBar();
         }
       }

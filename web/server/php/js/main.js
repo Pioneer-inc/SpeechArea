@@ -33,9 +33,7 @@ function saveAudio() {
     audioRecorder.exportWAV( doneEncoding );
 }
 
-function convertAudioToText() {
-    //var audioBlob = audioRecorder.getWavBlob(doneEncoding);
-    //alert("Audio Blob is" + audioBlob);
+function convertAudioToText(data) {
 
     // Call the rest service here
 
@@ -46,9 +44,20 @@ function convertAudioToText() {
 }
 
 function drawWave( buffers ) {
-    var canvas = document.getElementById( "wavedisplay" );
+    // var canvas = document.getElementById( "wavedisplay" );
+    // drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
+    var data = buffers[0]; // data has the audio stream
+    alert("Audio Stream Length is: " + data.length.toString());
 
-    drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
+    // Call the rest service here
+    // var convertedText = convertAudioToText(data);
+    var convertedText = "Placeholder text. ";
+    var oldText = "";
+    if (document.getElementById('textArea1').value != null && document.getElementById('textArea1').value != "") {
+        oldText = document.getElementById('textArea1').value + " ";
+    }
+    var newText = oldText + convertedText;
+    document.getElementById('textArea1').value = newText;
 }
 
 function doneEncoding( blob ) {
