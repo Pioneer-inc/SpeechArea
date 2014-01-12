@@ -28,8 +28,8 @@ if (!function_exists('curl_init')) {
     throw new Exception($err);
 }
 
-require_once __DIR__ . '/Multipart.php';
-require_once __DIR__ . '/RESTFulResponse.php';
+require_once dirname(__FILE__) . '/Multipart.php';
+require_once dirname(__FILE__) . '/RESTFulResponse.php';
 
 /**
  * Used for sending restful requests. 

@@ -22,8 +22,8 @@
  * @link      http://developer.att.com
  */
 
-require_once __DIR__ . '../../OAuth/OAuthToken.php';
-require_once __DIR__ . '../../Restful/RESTFulRequest.php';
+require_once dirname(__FILE__) . '../../OAuth/OAuthToken.php';
+require_once dirname(__FILE__) . '../../Restful/RESTFulRequest.php';
 
 /**
  * Basic class for storing any exceptions related to API requests.
@@ -71,7 +71,8 @@ class ServiceException extends Exception
             $msg = $errCode . ':' . $errBody; 
         }
 
-        parent::__construct($msg, $code, $previous);
+        //parent::__construct($msg, $code, $previous);
+        parent::__construct($msg, $code);
         $this->_errorCode = $errCode;
         $this->_errorResponse = $errBody;
     }

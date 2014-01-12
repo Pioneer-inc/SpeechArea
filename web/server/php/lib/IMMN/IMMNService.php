@@ -21,8 +21,8 @@
  * @license   http://developer.att.com/sdk_agreement AT&T License
  * @link      http://developer.att.com
  */
-require_once __DIR__ . '../../Srvc/APIService.php';
-require_once __DIR__ . '/IMMNResponse.php';
+require_once dirname(__FILE__) . '../../Srvc/APIService.php';
+require_once dirname(__FILE__) . '/IMMNResponse.php';
 
 /**
  * Used to interact with version 1 of the In-app Messaging from Mobile Number 

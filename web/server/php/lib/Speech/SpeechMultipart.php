@@ -22,7 +22,7 @@
  * @link      http://developer.att.com
  */
 
-require_once __DIR__ . '/../Restful/Multipart.php';
+require_once dirname(__FILE__) . '/../Restful/Multipart.php';
 
 /**
  * Used to handle the multipart aspect of a speech request.

@@ -1,15 +1,15 @@
 <?php
 // Mandatory parameter that should be set to the registered application's 
 // 'API Key' value.
-$api_key = "";
+$api_key = "kdgjx3k1joucj5acmfokbcbtwwfn1miq";
  
 // Mandatory parameter that should be set to the registered application's
 // 'Secret Key' value.
-$secret_key = "";
+$secret_key = "vnrpjlrjr57inj5inetscmsmgawtmo1f";
 
 // Fully Qualified Domain Name. Mandatory parameter that points to the location
 // of AT&T's API.
-$FQDN = "https://api-uat.bf.pacer.sl.attcompute.com";
+$FQDN = "https://api.att.com";
 
 // Mandatory parameter that points to AT&T's Speech API. 
 $endpoint = $FQDN . "/speech/v3/speechToText";

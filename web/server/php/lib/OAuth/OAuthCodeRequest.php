@@ -22,8 +22,8 @@
  * @link      http://developer.att.com
  */
 
-require_once __DIR__ . '/OAuthCode.php';
-require_once __DIR__ . '/OAuthException.php';
+require_once dirname(__FILE__) . '/OAuthCode.php';
+require_once dirname(__FILE__) . '/OAuthException.php';
 
 /**
  * Implements the OAuth 2.0 Authorization Framework for requesting OAuth codes,

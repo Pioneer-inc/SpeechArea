@@ -19,7 +19,7 @@
  * @license http://developer.att.com/sdk_agreement/
  */
 
-require_once __DIR__ . '/../Util/Util.php';
+require_once dirname(__FILE__) . '/../Util/Util.php';
 
 /**
  * In a multiepart request, this class represents the POST body of that

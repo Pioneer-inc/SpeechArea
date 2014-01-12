@@ -21,10 +21,10 @@
  * @license   http://developer.att.com/sdk_agreement AT&T License
  * @link      http://developer.att.com
  */
-require_once __DIR__ . '../../Srvc/APIService.php';
-require_once __DIR__ . '/NBest.php';
-require_once __DIR__ . '/SpeechMultipart.php';
-require_once __DIR__ . '/SpeechResponse.php';
+require_once dirname(__FILE__) . '../../Srvc/APIService.php';
+require_once dirname(__FILE__) . '/NBest.php';
+require_once dirname(__FILE__) . '/SpeechMultipart.php';
+require_once dirname(__FILE__) . '/SpeechResponse.php';
 
 /**
  * Used to interact with version 3 of the Speech API.

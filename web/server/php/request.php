@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/lib/OAuth/OAuthTokenService.php'; 
-require_once __DIR__ . '/lib/Speech/SpeechService.php'; 
+require_once dirname(__FILE__) . '/lib/OAuth/OAuthTokenService.php'; 
+require_once dirname(__FILE__) . '/lib/Speech/SpeechService.php'; 
 require 'config_speech.php';
 
 $proxyHost = isset($proxy_host) ? $proxy_host : null;
@@ -22,6 +22,7 @@ function getFileToken($tname)
     return $token;
 }
 $token = getFileToken('t.php');
+
 $srvc = new SpeechService($FQDN, $token);
 $fname = 'speech.wav';
 $response = $srvc->speechToText($fname, 'Generic');

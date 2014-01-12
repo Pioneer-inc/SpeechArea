@@ -28,9 +28,9 @@ if (!function_exists('json_decode')) {
     throw new Exception($err);
 }
 
-require_once __DIR__ . '/ServiceException.php';
-require_once __DIR__ . '../../OAuth/OAuthToken.php';
-require_once __DIR__ . '../../Restful/RESTFulRequest.php';
+require_once dirname(__FILE__) . '/ServiceException.php';
+require_once dirname(__FILE__) . '../../OAuth/OAuthToken.php';
+require_once dirname(__FILE__) . '../../Restful/RESTFulRequest.php';
 
 /**
  * Base class used to hold common code for sending Restful requests.

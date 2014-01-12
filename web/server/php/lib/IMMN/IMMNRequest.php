@@ -19,9 +19,9 @@
  * @copyright AT&T Intellectual Property
  * @license http://developer.att.com/sdk_agreement/
  */
-require_once __DIR__ . '../../OAuth/OAuthToken.php';
-require_once __DIR__ . '../../Common/RESTFulRequest.php';
-require_once __DIR__ . '/IMMNResponse.php';
+require_once dirname(__FILE__) . '../../OAuth/OAuthToken.php';
+require_once dirname(__FILE__) . '../../Common/RESTFulRequest.php';
+require_once dirname(__FILE__) . '/IMMNResponse.php';
 
 /**
  * Used for sending IMMN requests. Such requests include getting and sending

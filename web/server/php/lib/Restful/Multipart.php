@@ -22,7 +22,7 @@
  * @link      http://developer.att.com
  */
 
-require_once __DIR__ . '/../Util/Util.php';
+require_once dirname(__FILE__) . '/../Util/Util.php';
 
 /**
  * In a multipart request, this class represents the POST body of that

@@ -22,7 +22,7 @@
  * @link      http://developer.att.com
  */
 
-require_once __DIR__ . '/Service.php';
+require_once dirname(__FILE__) . '/Service.php';
 
 /**
  * Base class used to hold common code for sending API requests. 

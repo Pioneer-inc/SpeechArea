@@ -22,9 +22,9 @@
  * @link      http://developer.att.com
  */
 
-require_once __DIR__ . '../../OAuth/OAuthTokenService.php';
-require_once __DIR__ . '../../OAuth/OAuthCodeRequest.php';
-require_once __DIR__ . '../../Srvc/Service.php';
+require_once dirname(__FILE__) . '../../OAuth/OAuthTokenService.php';
+require_once dirname(__FILE__) . '../../OAuth/OAuthCodeRequest.php';
+require_once dirname(__FILE__) . '../../Srvc/Service.php';
 
 /**
  * Base class used to implement an MVC controller. 
@@ -101,7 +101,7 @@ abstract class APIController
             unserialize($_SESSION['token']) : null;
 
         // load redirect URL 
-        include __DIR__ . '/../../config.php';
+        include dirname(__FILE__) . '/../../config.php';
 
         // No token or token is expired... send token request
         if (!$token || $token->isAccessTokenExpired()) {
@@ -136,7 +136,7 @@ abstract class APIController
     protected function getFileToken() 
     {
         // load location where to save token 
-        include __DIR__ . '/../../config.php';
+        include dirname(__FILE__) . '/../../config.php';
 
         if (!isset($oauth_file)) {
             // set default if can't load
@@ -195,7 +195,7 @@ abstract class APIController
     protected function __construct() 
     {
         // Copy config values to member variables
-        include __DIR__ . '/../../config.php';
+        include dirname(__FILE__) . '/../../config.php';
         $this->FQDN = $FQDN;
         $this->clientId = $api_key;
         $this->clientSecret = $secret_key;

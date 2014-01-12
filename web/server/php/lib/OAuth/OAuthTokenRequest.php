@@ -20,10 +20,10 @@
  * @license http://developer.att.com/sdk_agreement/
  */
 
-require_once __DIR__ . '/OAuthCode.php';
-require_once __DIR__ . '/OAuthToken.php';
-require_once __DIR__ . '/OAuthException.php';
-require_once __DIR__ . '../../Common/RESTFulRequest.php';
+require_once dirname(__FILE__) . '/OAuthCode.php';
+require_once dirname(__FILE__) . '/OAuthToken.php';
+require_once dirname(__FILE__) . '/OAuthException.php';
+require_once dirname(__FILE__) . '../../Common/RESTFulRequest.php';
 
 /**
  * Implements the OAuth 2.0 Authorization Framework for requesting access 

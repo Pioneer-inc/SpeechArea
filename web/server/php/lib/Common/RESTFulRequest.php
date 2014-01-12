@@ -19,7 +19,7 @@
  * @license http://developer.att.com/sdk_agreement/
  */
 
-require_once __DIR__ . '/Multipart.php';
+require_once dirname(__FILE__) . '/Multipart.php';
 
 /**
  * Class containing common information for sending RESTFul requests.

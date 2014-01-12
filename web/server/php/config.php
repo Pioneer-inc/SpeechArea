@@ -1,7 +1,7 @@
 <?php
-    $api_key = "";
-    $secret_key = "";
-    $FQDN = "https://api-uat.bf.pacer.sl.attcompute.com";
+    $api_key = "kdgjx3k1joucj5acmfokbcbtwwfn1miq";
+    $secret_key = "vnrpjlrjr57inj5inetscmsmgawtmo1f";
+    $FQDN = "https://api.att.com";
     $endpoint = $FQDN . '/rest/1/MyMessages';
     $authorize_redirect_uri = "http://localhost/bstest/index.php";
     $scope = "IMMN,MIM";

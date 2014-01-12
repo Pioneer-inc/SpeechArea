@@ -2,8 +2,8 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4 foldmethod=marker: */
 
 
-require_once __DIR__ . '/../../lib/Controller/APIController.php';
-require_once __DIR__ . '/../../lib/IMMN/IMMNService.php';
+require_once dirname(__FILE__) . '/../../lib/Controller/APIController.php';
+require_once dirname(__FILE__) . '/../../lib/IMMN/IMMNService.php';
 
 class IMMNController extends APIController {
 
@@ -43,7 +43,7 @@ class IMMNController extends APIController {
     public function __construct() {
         parent::__construct();
         // Copy config values to member variables
-        require __DIR__ . '/../../config.php';
+        require dirname(__FILE__) . '/../../config.php';
         $this->_attachmentsFolder = $attachments_folder;
     }
 
