@@ -97,9 +97,6 @@
           }
           */
 
-          alert("Submit clicked.");
-          return;
-
           var xmlhttp = new XMLHttpRequest();
           xmlhttp.onreadystatechange=function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -128,9 +125,130 @@
           hideCanvas();
 	      setProgressBarText('Converting audio to text....');
           toggleRecording(v);
+          var oldText = document.getElementById('textArea1').innerHTML;
+          var newText = convertAudioToText();
+		  //newText = handleATTSpeechApi();
+		  //alert(newText);
+		  processFile();
+          document.getElementById('textArea1').innerHTML = oldText & newText;
 	      hideProgressBar();
         }
       }
+	  
+	  function processFile()
+	  {
+		var oReq = new XMLHttpRequest();
+		oReq.open("GET", "speech.wav", true);
+		oReq.responseType = "arrayBuffer";	//"blob";
+		oReq.onload = function(oEvent) {
+		  handleATTSpeechApi2(oReq.response);
+		};
+		oReq.send();
+	 }
+	  
+	  function handleATTSpeechApiResponse(result)
+	  {
+		var oldText = document.getElementById('textArea1').innerHTML;
+		var newText = result;
+		document.getElementById('textArea1').innerHTML = oldText & newText;
+		hideProgressBar();
+
+	  }
+	  
+	  function handleATTSpeechApi2(voiceblob) {
+		alert(voiceblob.length);
+		 console.log("handleATTSpeechApi2 called");
+		 var url = "https://api.att.com/speech/v3/SpeechToText";
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.responseType = "jsonp";	//"blob";
+		xhr.setRequestHeader("X-HostCommonName","api.att.com");
+		xhr.setRequestHeader("Authorization","Bearer r6QGQQthCpPsk9oucSFOIUXq7vFWtLGM");
+		//xhr.setRequestHeader("Content-Length",voiceblob.length);
+		//xhr.setRequestHeader("Content-Type","audio/wav");
+		xhr.setRequestHeader("Accept","application/json");
+		xhr.setRequestHeader("Context-Language","en-US");
+		xhr.setRequestHeader("X-SpeechContext","Generic");
+		xhr.setRequestHeader("X-Target-URI","https://api.att.com");
+		xhr.onload = function(oEvent) {
+		  alert(xhr.response);
+		};
+		xhr.send();
+/*
+		$.ajax({
+				url: url,
+				type: "POST",
+				crossDomain: true,
+				dataType: "jsonp",
+				jsonpCallback: "handleATTSpeechApiResponse",
+				contentType: 'audio/wav',
+				data: voiceblob, 	//bytesArray,
+				processData: false,
+				beforeSend: function(xhrObj){
+						//xhrObj.setRequestHeader("Host","api.att.com");
+						xhrObj.setRequestHeader("X-HostCommonName","api.att.com");
+						xhrObj.setRequestHeader("Authorization","Bearer r6QGQQthCpPsk9oucSFOIUXq7vFWtLGM");
+						//xhrObj.setRequestHeader("Content-Length",voiceblob.length);
+						//xhrObj.setRequestHeader("Content-Type","audio/wav");
+						xhrObj.setRequestHeader("Accept","application/json");
+						xhrObj.setRequestHeader("Contenxhrt-Language","en-US");
+						xhrObj.setRequestHeader("X-SpeechContext","Generic");
+						xhrObj.setRequestHeader("X-Target-URI","https://api.att.com");
+						//xhrObj.setRequestHeader("Connection","Keep-Alive");
+					},
+				success: function(result){
+					alert("ajax result"+result);
+				},
+				error:function(error){
+				  alert(error);
+				  hideProgressBar();
+				},
+				complete:function(){alert('call completed');}
+			}); 
+*/
+		}
+	  
+		function handleATTSpeechApi(voiceblob) {
+		alert(voiceblob.size);
+		 console.log("handleATTSpeechApi called");
+		 var url = "https://api.att.com/speech/v3/SpeechToText";
+		 //var file = $('#file_upload').get(0).files[0];
+		 //var bytesArray = new Uint8Array(voiceblob.length);
+		 //for (var i = 0, l = voiceblob.length; i < l; i++) {
+		 // bytesArray[i] = voiceblob[i];
+		 //}
+		 $.ajax({
+				url: url,
+				type: "POST",
+				crossDomain: true,
+				dataType: "jsonp",
+				jsonpCallback: "handleATTSpeechApiResponse",
+				contentType: 'audio/wav',
+				data: voiceblob, 	//bytesArray,
+				processData: false,
+				beforeSend: function(xhrObj){
+						//xhrObj.setRequestHeader("Host","api.att.com");
+						xhrObj.setRequestHeader("X-HostCommonName","api.att.com");
+						xhrObj.setRequestHeader("Authorization","Bearer r6QGQQthCpPsk9oucSFOIUXq7vFWtLGM");
+						//xhrObj.setRequestHeader("Content-Length",voiceblob.length);
+						//xhrObj.setRequestHeader("Content-Type","audio/wav");
+						xhrObj.setRequestHeader("Accept","application/json");
+						xhrObj.setRequestHeader("Content-Language","en-US");
+						xhrObj.setRequestHeader("X-SpeechContext","Generic");
+						xhrObj.setRequestHeader("X-Target-URI","https://api.att.com");
+						//xhrObj.setRequestHeader("Connection","Keep-Alive");
+					},
+				success: function(result){
+					alert("ajax result"+result);
+				},
+				error:function(error){
+				  alert(error);
+				  hideProgressBar();
+				},
+				complete:function(){alert('call completed');}
+			}); 
+		}
+
     </script>
   </head>
   <body>

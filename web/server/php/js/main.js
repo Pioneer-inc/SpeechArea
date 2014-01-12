@@ -52,10 +52,12 @@ function drawWave( buffers ) {
     // Call the rest service here
     // var convertedText = convertAudioToText(data);
     var convertedText = "Placeholder text. ";
-
-    var oldText = document.getElementById('textArea1').innerHTML;
-    alert(oldText);
-    // document.getElementById('textArea1').innerHTML = oldText & convertedText;
+    var oldText = "";
+    if (document.getElementById('textArea1').value != null && document.getElementById('textArea1').value != "") {
+        oldText = document.getElementById('textArea1').value + " ";
+    }
+    var newText = oldText + convertedText;
+    document.getElementById('textArea1').value = newText;
 }
 
 function doneEncoding( blob ) {
