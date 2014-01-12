@@ -1,0 +1,29 @@
+{
+  "Recognition":  {
+    "Info":  {
+      "metrics":  {
+        "audioBytes": 50880,
+        "audioTime": 3.18000007
+      }
+    },
+    "NBest":  [
+       {
+        "Confidence": 1,
+        "Grade": "accept",
+        "Hypothesis": "boston celtics",
+        "LanguageId": "en-US",
+        "ResultText": "Boston celtics.",
+        "WordScores":  [
+          1,
+          1
+        ],
+        "Words":  [
+          "Boston",
+          "celtics."
+        ]
+      }
+    ],
+    "ResponseId": "d9c042f8f5da4b46d22e4e2b1fc9f99b",
+    "Status": "OK"
+  }
+}
