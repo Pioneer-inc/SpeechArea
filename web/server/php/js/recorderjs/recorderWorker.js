@@ -64,6 +64,16 @@ function exportWAV(type){
          */
 }
 
+function getWavBlob(type) {
+    var bufferL = mergeBuffers(recBuffersL, recLength);
+    var bufferR = mergeBuffers(recBuffersR, recLength);
+    var interleaved = interleave(bufferL, bufferR);
+    var dataview = encodeWAV(interleaved);
+    var audioBlob = new Blob([dataview], { type: type });
+
+    return audioBlob;
+}
+
 function getBuffers() {
   var buffers = [];
   buffers.push( mergeBuffers(recBuffersL, recLength) );

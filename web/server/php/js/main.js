@@ -33,6 +33,18 @@ function saveAudio() {
     audioRecorder.exportWAV( doneEncoding );
 }
 
+function convertAudioToText() {
+    //var audioBlob = audioRecorder.getWavBlob(doneEncoding);
+    //alert("Audio Blob is" + audioBlob);
+
+    // Call the rest service here
+
+    var convertedText = "Placeholder text. ";
+
+    // return converted text
+    return convertedText;
+}
+
 function drawWave( buffers ) {
     var canvas = document.getElementById( "wavedisplay" );
 
