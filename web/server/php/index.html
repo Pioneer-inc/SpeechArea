@@ -45,12 +45,15 @@
           e.preventDefault();
           $(this).tab('show');
         });
+		$('#textArea1').on('change', function(event) {
+										prepareChannels(this);
+									});
       });
     </script>
     <script>
       var recording = false;
 
-      function setAlertText(txt) {
+	  function setAlertText(txt) {
         document.getElementById("alertDiv").style.display = 'inline';
         document.getElementById("innerAlertDiv").innerHTML = txt;
       }
@@ -220,8 +223,23 @@
                         onclick="sendSpeechRequest()">Submit</button>
                     </div>
                   </div>
-                       <label>Text:</label>
-                       <textarea id="textArea1" name="textArea1" rows="4" value=""></textarea>
+			   <label>Text:</label>
+			   <textarea id="textArea1" name="textArea1" rows="4" value=""></textarea>
+			  <div class="row-fluid">
+				<div id="channelsDiv" class="span12">
+				  <ul>
+					<li><form id="form_tweet" method="get" action="https://twitter.com/intent/tweet" target="tweet_speecharea"><input type="hidden" name="status"><a href="#" onclick="if(form_tweet.status.value.length==0){alert('Nothing to Tweet!!');return(false);} form_tweet.submit(); return(false);"><i></i><span class="tweetlabel">Preview Tweet</span></a></form>
+					<li class='inactive'>facebook (TODO)
+					<li class='inactive'>Google+ (TODO)
+					<li class='inactive'>Tumblr (TODO)
+				  </ul>
+				  <script language="javascript">
+					function prepareChannels(ctlTextArea) {
+						form_tweet.status.value = ctlTextArea.value;
+					}
+				  </script>
+				</div>
+			  </div>
               <div id="alertDiv" class="row-fluid" style="display:none">
                 <div id="innerAlertDiv" class="alert alert-error">
                 </div>
