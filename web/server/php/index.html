@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>AT&amp;T Sample Application - Speech To Text</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="IMMN Sample Application">
+    <meta name="description" content="Speech Sample Application">
     <meta name="author" content="SECRET">
 
     <!--[if lt IE 9]>
@@ -147,15 +147,6 @@
             </a>
             <div class="media-body">
               <div class="nav-collapse collapse pull-right">
-                <ul class="nav">
-                  <li><a href="#" target="_blank">Full Page</a></li>
-                  <li><a class="abottom" data-toggle="tooltip" 
-                      title="Click here to download source code for this sample application." 
-                      href="#" target="_blank">Source</a><li>
-                  <li><a href="#" target="_blank">Download</a></li>
-                  <li><a href="#" target="_blank">Help</a></li>
-                  <li><a href="#" target="_blank">API Documentation</a></li>
-                </ul>
               </div> <!--/media-body-->
             </div> <!--/media-->
           </div><!--/.nav-collapse -->
@@ -167,12 +158,7 @@
       <div class="bwrapper">
         <div class="row-fluid">
           <div class="span12">
-            <h4>Speech To Text Sample Application</h4>
-          </div>
-        </div>
-        <div id="alertDiv" class="row-fluid">
-          <div id="innerAlertDiv" class="alert alert-error">
-          This application currently works only on the latest versions of google-chrome (desktop version).
+            <h4>Speech To Text Application</h4>
           </div>
         </div>
         <div class="row-fluid">
@@ -183,7 +169,7 @@
               -->
                 <fieldset>
                   <div class="row-fluid">
-                    <div class="span4">
+                    <div class="span4" style="display:none">
                       <label>Speech Context:</label>
                       <select name="context">
                         <option value="Generic">Generic</option>
@@ -201,15 +187,6 @@
                       <label id="flabel">Audio File:</label>
                       <button id="recording" type="text" class="submit btn btn-primary" 
                           onclick="clickRecordButton(this)">Record</button>
-                          <!--
-                      <select name="fname">
-                        <option value="BostonCeltics.wav">BostonCeltics.wav</option>
-                        <option value="california.amr">california.amr</option>
-                        <option value="coffee.amr">coffee.amr</option>
-                        <option value="doctors.wav">doctors.wav</option>
-                        <option value="nospeech.wav">nospeech.wav</option>
-                      </select>
-                      -->
                     </div>
                   </div><!--/row-fluid-->
 
@@ -218,7 +195,7 @@
                     <a class="aright" href="#" data-toggle="tooltip" 
                         title="Check this to send the request chunked.">Send Chunked</a>
                   </label>
-                  <div class="row-fluid">
+                  <div class="row-fluid" style="display:none">
                     <div class="span4">
                        <label>X-Arg:</label>
                        <textarea id="x_arg" name="x_arg" readonly="readonly" rows="4" 
@@ -231,21 +208,6 @@
                     </div><!--/.span4-->
                   </div><!--/row-fluid-->
 
-<!--
-                  <div class="row-fluid">
-                    <div class="span4">
-                      <button type="text" onclick="toggleRecording(this);">
-                    </div>
-                      <img id="record" width="128" height="128" src="img/mic128.png" onclick="toggleRecording(this);"><br>
-                    </div>
-                    <div class="span4">
-                    
-                      <button id="brecord" type="text" class="submit btn btn-primary" 
-                          onclick="saveAudio(this);">Record</button>
-                    </div>
-                  </div>
-
--->
                 <div id="alertDiv" class="row-fluid">
                   <div id="innerAlertDiv" class="alert alert-note">
                   After hitting 'Stop Record,' please wait a few seconds before hitting 'Submit.'
@@ -258,27 +220,11 @@
                         onclick="sendSpeechRequest()">Submit</button>
                     </div>
                   </div>
-
-                  <!--
-                  <div class="row-fluid">
-                    <div class="span12">
-                      <div class="alert alert-success">  
-                        <strong>Success:</strong><br>Speech parameters listed below :)
-                      </div> 
-                    </div>
-                  </div>
-                </fieldset>
-              </form>
-              -->
-      
+                       <label>Text:</label>
+                       <textarea id="textArea1" name="textArea1" rows="4" value=""></textarea>
               <div id="alertDiv" class="row-fluid" style="display:none">
                 <div id="innerAlertDiv" class="alert alert-error">
                 </div>
-              </div>
-              <div id="tableDiv" style="display:none">
-              </div>
-              <div id="canvasDiv" class="row-fluid" style="display:none">
-                <canvas id="analyser" width="768" height="200"></canvas><br>
               </div>
             </div> <!--/wrapper-->
           </div> <!--./bwrapper-->
