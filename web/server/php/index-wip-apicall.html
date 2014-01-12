@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SpeechArea Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Speech Sample Application">
+    <meta name="author" content="SECRET">
+
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- jquery lib -->
+    <script src="js/jquery.min.js"></script>
+
+    <!-- bootstrap lib -->	
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css"/>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+
+    <script src="js/audiodisplay.js"></script>
+    <script src="js/recorderjs/recorder.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- custom lib -->
+    <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+
+    <!-- set up bootstrap -->
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#myTab a').click(function (e) {
+          e.preventDefault();
+          $(this).tab('show');
+        });
+		$('#textArea1').on('change', function(event) {
+										prepareChannels(this);
+									});
+      });
+    </script>
+    <script>
+      var recording = false;
+
+	  function setAlertText(txt) {
+        document.getElementById("alertDiv").style.display = 'inline';
+        document.getElementById("innerAlertDiv").innerHTML = txt;
+      }
+
+      function setTableText(txt) {
+        document.getElementById("tableDiv").style.display = 'inline';
+        document.getElementById("tableDiv").innerHTML = txt;
+      }
+
+      function hideTableText() {
+        document.getElementById("tableDiv").style.display = 'none';
+      }
+
+      function showCanvas() {
+        document.getElementById("canvasDiv").style.display = 'inline';
+      }
+
+      function hideCanvas() {
+        document.getElementById("canvasDiv").style.display = 'none';
+      }
+
+      function hideAlertText() {
+        document.getElementById("alertDiv").style.display = 'none';
+      }
+
+      function setProgressBarText(txt) {
+        document.getElementById("progressDiv").style.display = 'inline';
+        document.getElementById("progressLabel").innerHTML = txt;
+
+      }
+
+      function hideProgressBar() {
+        document.getElementById("progressDiv").style.display = 'none';
+      }
+
+      function sendSpeechRequest() {
+        /*
+          if (rawAudio == null) {
+            setAlertText('You must first record the file!');
+            return;
+          }
+          */
+
+          var xmlhttp = new XMLHttpRequest();
+          xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+              hideProgressBar();
+              setTableText(xmlhttp.responseText);
+            }
+          };
+	  setProgressBarText('Sending request...');
+          xmlhttp.open("GET", "request.php", true);
+          xmlhttp.send();
+          hideTableText();
+      }
+
+      function clickRecordButton(v) {
+        hideTableText();
+        recording = !recording;
+        if (recording) {
+          setAlertText('RECORDING IS IN PROGRESS!');
+          document.getElementById('recording').innerHTML = 'Stop Recording';
+          toggleRecording(v);
+          showCanvas();
+        } else { /* stop recording */
+          document.getElementById('recording').innerHTML = 'Record';
+          document.getElementById('flabel').innerHTML = 'Audio File: <a href="tmp2channels.wav">wav file</a>';
+          hideAlertText();
+          hideCanvas();
+	      setProgressBarText('Converting audio to text....');
+          toggleRecording(v);
+          var oldText = document.getElementById('textArea1').innerHTML;
+          var newText = convertAudioToText();
+		  //newText = handleATTSpeechApi();
+		  //alert(newText);
+		  processFile();
+          document.getElementById('textArea1').innerHTML = oldText & newText;
+	      hideProgressBar();
+        }
+      }
+	  
+	  function processFile()
+	  {
+		var oReq = new XMLHttpRequest();
+		oReq.open("GET", "speech.wav", true);
+		oReq.responseType = "arrayBuffer";	//"blob";
+		oReq.onload = function(oEvent) {
+		  handleATTSpeechApi2(oReq.response);
+		};
+		oReq.send();
+	 }
+	  
+	  function handleATTSpeechApiResponse(result)
+	  {
+		var oldText = document.getElementById('textArea1').innerHTML;
+		var newText = result;
+		document.getElementById('textArea1').innerHTML = oldText & newText;
+		hideProgressBar();
+
+	  }
+	  
+	  function handleATTSpeechApi2(voiceblob) {
+		alert(voiceblob.length);
+		 console.log("handleATTSpeechApi2 called");
+		 var url = "https://api.att.com/speech/v3/SpeechToText";
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.responseType = "jsonp";	//"blob";
+		xhr.setRequestHeader("X-HostCommonName","api.att.com");
+		xhr.setRequestHeader("Authorization","Bearer r6QGQQthCpPsk9oucSFOIUXq7vFWtLGM");
+		//xhr.setRequestHeader("Content-Length",voiceblob.length);
+		//xhr.setRequestHeader("Content-Type","audio/wav");
+		xhr.setRequestHeader("Accept","application/json");
+		xhr.setRequestHeader("Context-Language","en-US");
+		xhr.setRequestHeader("X-SpeechContext","Generic");
+		xhr.setRequestHeader("X-Target-URI","https://api.att.com");
+		xhr.onload = function(oEvent) {
+		  alert(xhr.response);
+		};
+		xhr.send();
+/*
+		$.ajax({
+				url: url,
+				type: "POST",
+				crossDomain: true,
+				dataType: "jsonp",
+				jsonpCallback: "handleATTSpeechApiResponse",
+				contentType: 'audio/wav',
+				data: voiceblob, 	//bytesArray,
+				processData: false,
+				beforeSend: function(xhrObj){
+						//xhrObj.setRequestHeader("Host","api.att.com");
+						xhrObj.setRequestHeader("X-HostCommonName","api.att.com");
+						xhrObj.setRequestHeader("Authorization","Bearer r6QGQQthCpPsk9oucSFOIUXq7vFWtLGM");
+						//xhrObj.setRequestHeader("Content-Length",voiceblob.length);
+						//xhrObj.setRequestHeader("Content-Type","audio/wav");
+						xhrObj.setRequestHeader("Accept","application/json");
+						xhrObj.setRequestHeader("Contenxhrt-Language","en-US");
+						xhrObj.setRequestHeader("X-SpeechContext","Generic");
+						xhrObj.setRequestHeader("X-Target-URI","https://api.att.com");
+						//xhrObj.setRequestHeader("Connection","Keep-Alive");
+					},
+				success: function(result){
+					alert("ajax result"+result);
+				},
+				error:function(error){
+				  alert(error);
+				  hideProgressBar();
+				},
+				complete:function(){alert('call completed');}
+			}); 
+*/
+		}
+	  
+		function handleATTSpeechApi(voiceblob) {
+		alert(voiceblob.size);
+		 console.log("handleATTSpeechApi called");
+		 var url = "https://api.att.com/speech/v3/SpeechToText";
+		 //var file = $('#file_upload').get(0).files[0];
+		 //var bytesArray = new Uint8Array(voiceblob.length);
+		 //for (var i = 0, l = voiceblob.length; i < l; i++) {
+		 // bytesArray[i] = voiceblob[i];
+		 //}
+		 $.ajax({
+				url: url,
+				type: "POST",
+				crossDomain: true,
+				dataType: "jsonp",
+				jsonpCallback: "handleATTSpeechApiResponse",
+				contentType: 'audio/wav',
+				data: voiceblob, 	//bytesArray,
+				processData: false,
+				beforeSend: function(xhrObj){
+						//xhrObj.setRequestHeader("Host","api.att.com");
+						xhrObj.setRequestHeader("X-HostCommonName","api.att.com");
+						xhrObj.setRequestHeader("Authorization","Bearer r6QGQQthCpPsk9oucSFOIUXq7vFWtLGM");
+						//xhrObj.setRequestHeader("Content-Length",voiceblob.length);
+						//xhrObj.setRequestHeader("Content-Type","audio/wav");
+						xhrObj.setRequestHeader("Accept","application/json");
+						xhrObj.setRequestHeader("Content-Language","en-US");
+						xhrObj.setRequestHeader("X-SpeechContext","Generic");
+						xhrObj.setRequestHeader("X-Target-URI","https://api.att.com");
+						//xhrObj.setRequestHeader("Connection","Keep-Alive");
+					},
+				success: function(result){
+					alert("ajax result"+result);
+				},
+				error:function(error){
+				  alert(error);
+				  hideProgressBar();
+				},
+				complete:function(){alert('call completed');}
+			}); 
+		}
+
+    </script>
+  </head>
+  <body>
+  <!--
+	<canvas id="analyser" width="768" height="200"></canvas><br>
+	<canvas id="wavedisplay" width="768" height="200"></canvas><br>
+  -->
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="media">
+            <a class="pull-left" href="#">
+            </a>
+            <div class="media-body">
+              <div class="nav-collapse collapse pull-right">
+              </div> <!--/media-body-->
+            </div> <!--/media-->
+          </div><!--/.nav-collapse -->
+        </div> <!-- end of container-fluid -->
+      </div> <!-- end of navbar-inner -->
+    </div> <!-- end of navbar -->
+
+    <div class="container-fluid">
+      <div class="bwrapper">
+        <div class="row-fluid">
+          <div class="span12">
+            <h4>SpeechArea Application</h4>
+          </div>
+        </div>
+        <div class="row-fluid">
+          <div class="span12">
+            <div class="wrapper">
+            <!--
+              <form method="post" action="index.php" name="msgContentForm">
+              -->
+                <fieldset>
+                  <div class="row-fluid">
+                    <div class="span4" style="display:none">
+                      <label>Speech Context:</label>
+                      <select name="context">
+                        <option value="Generic">Generic</option>
+                        <option value="TV">TV</option>
+                        <option value="BusinessSearch">BusinessSearch</option>
+                        <option value="Websearch">Websearch</option>
+                        <option value="SMS">SMS</option>
+                        <option value="Voicemail">Voicemail</option>
+                        <option value="QuestionAndAnswer">QuestionAndAnswer</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="SocialMedia">SocialMedia</option>
+                      </select>
+                    </div>
+                    <div class="span4">
+                      <label id="flabel" style="display:none">Audio File:</label>
+                      <button id="recording" type="text" class="submit btn btn-primary" 
+                          onclick="clickRecordButton(this)">Record</button>
+                       <br /><br />
+                    </div>
+                  </div><!--/row-fluid-->
+
+                  <label class="checkbox" style="display:none">
+                    <input name="sendChunked" type="checkbox">
+                    <a class="aright" href="#" data-toggle="tooltip" 
+                        title="Check this to send the request chunked.">Send Chunked</a>
+                  </label>
+                  <div class="row-fluid" style="display:none">
+                    <div class="span4">
+                       <label>X-Arg:</label>
+                       <textarea id="x_arg" name="x_arg" readonly="readonly" rows="4" 
+                           value="test=123">test=123</textarea>
+                    </div><!--/.span4-->
+                    <div class="span4">
+                      <label>X-SpeechSubContext</label>
+                      <textarea id="x_subContext" name="x_arg" readonly="readonly" rows="4" 
+                          value="Chat">Chat</textarea>
+                    </div><!--/.span4-->
+                  </div><!--/row-fluid-->
+
+                <div id="alertDiv" class="row-fluid" style="display:none">
+                  <div id="innerAlertDiv" class="alert alert-note" style="display:none">
+                  After hitting 'Stop Record,' please wait a few seconds before hitting 'Submit.'
+                  </div>
+                </div>
+
+                  <div class="row-fluid" style="display:none">
+                    <div class="span12">
+                      <button type="submit" class="submit btn btn-primary" id="submit" name="submit"
+                        onclick="sendSpeechRequest()">Submit</button>
+                    </div>
+                  </div>
+			   <textarea id="textArea1" name="textArea1" rows="4" value=""></textarea>
+			  <div class="row-fluid">
+				<div id="channelsDiv" class="span12">
+				  <ul>
+					<li><form id="form_tweet" method="get" action="https://twitter.com/intent/tweet" target="tweet_speecharea"><input type="hidden" name="status"><a href="#" onclick="if(form_tweet.status.value.length==0){alert('Nothing to Tweet!!');return(false);} form_tweet.submit(); return(false);"><i></i><span class="tweetlabel">Preview Tweet</span></a></form>
+					<li class='inactive'><!--a title="Share this article/post/whatever on Facebook" 
+											href="http://www.facebook.com/sharer.php?s=100&p[url]=pioneer-inc.com/speecharea&p[message_text]=my+message&p[title]=This+is+title&p[summary]=the+description/summary+you+want+to+share" 
+											target="_blank"
+											onclick=""></a-->
+											 Share on Facebook
+
+					<li class='inactive'>Google+ (TODO)
+					<li class='inactive'>Tumblr (TODO)
+				  </ul>
+				  <script language="javascript">
+					function prepareChannels(ctlTextArea) {
+						form_tweet.status.value = ctlTextArea.value;
+					}
+				  </script>
+				</div>
+			  </div>
+            </div> <!--/wrapper-->
+          </div> <!--./bwrapper-->
+        </div> <!-- end of span offset -->
+      </div> <!--/row-fluid-->
+      <div id="progressDiv" class="row-fluid" style="display:none">
+        <label id="progressLabel"></label>
+        <div class="progress progress-striped active">
+          <div class="bar" style="width: 100%;"></div>
+        </div>
+      </div>
+              <div id="tableDiv" style="display:none">
+              </div>
+              <div id="canvasDiv" class="row-fluid" style="display:none">
+                <canvas id="analyser" width="768" height="200"></canvas><br>
+              </div>
+      <hr>
+      <footer>
+        <p>Have Fun Coding!</p>
+      </footer>
+    </div> <!--/container-fluid-->
+
+    <script>
+      $('#myTab a:first').tab('show');
+      $('input').tooltip({
+        'selector': '',
+        'placement': 'right'
+      });
+      $('.abottom').tooltip({
+        'selector': '',
+        'placement': 'bottom'
+      });
+      $('.aright').tooltip({
+        'selector': '',
+        'placement': 'right'
+      });
+    </script>
+  </body>
+</html>
