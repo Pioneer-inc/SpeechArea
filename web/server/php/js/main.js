@@ -36,23 +36,15 @@ function saveAudio() {
 function convertAudioToText(data) {
 
     // Call the rest service here
+	var convertedText = "Error!";
 
-    //var convertedText = "Placeholder text. ";
 	var oReq = new XMLHttpRequest();
-		oReq.open("GET", "mock_response.json", true);
-		oReq.responseType = "json";	//"blob";
-		oReq.onload = function(oEvent) {
-		//alert(oReq.response);
-				var convertedText = oReq.response.Recognition.NBest[0].ResultText;
-				var oldText = "";
-				if (document.getElementById('textArea1').value != null && document.getElementById('textArea1').value != "") {
-					oldText = document.getElementById('textArea1').value + " ";
-				}
-				var newText = oldText + convertedText;
-				document.getElementById('textArea1').value = newText;
-		};
-		oReq.send();// return converted text
-    //return convertedText;
+	oReq.open("GET", "mock_response.txt", true);
+	oReq.responseType = "json";	//"blob";
+	oReq.onload = function(oEvent) {
+		convertedText = oReq.response.Recognition.NBest[0].ResultText;
+	};
+	return convertedText;
 }
 
 function drawWave( buffers ) {
@@ -62,9 +54,14 @@ function drawWave( buffers ) {
     alert("Audio Stream Length is: " + data.length.toString());
 
     // Call the rest service here
-	convertAudioToText(data);
-    // var convertedText = convertAudioToText(data);
-    }
+	var convertedText = convertAudioToText(data);
+	var oldText = "";
+	if (document.getElementById('textArea1').value != null && document.getElementById('textArea1').value != "") {
+		oldText = document.getElementById('textArea1').value + " ";
+	}
+	var newText = oldText + convertedText;
+	document.getElementById('textArea1').value = newText;
+   }
 
 function doneEncoding( blob ) {
     Recorder.forceDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
