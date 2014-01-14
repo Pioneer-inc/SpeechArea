@@ -177,7 +177,11 @@ div#channelsDiv ul
 }
 div#channelsDiv li
 {
-	float:left; margin:0 0 0 10px; padding:5px 5px 15px 20px; list-style:none;
+	float:left; 
+	margin:0 0 0 10px; 
+	padding:5px 5px 15px 20px; 
+	list-style:none;
+	vertical-align: middle;
 }
 div#channelsDiv li.inactive
 {
@@ -228,3 +232,44 @@ div#channelsDiv form#form_tweet i
 	zoom: 1;
 	*display:inline: ;
 }
+
+div#fb_channel
+{
+	/*display:inline-block;*/
+} 
+div#fb_channel a
+{
+	background-color: rgb(95, 120, 171);
+	background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yx/r/j_i0CTUUUEe.png);
+	background-position: 0px -132px;
+	background-repeat: no-repeat;
+	border-collapse: collapse;
+	padding: 1px 2px 0px 22px;
+	display: inline-block;
+	height:22px;
+}
+div#fb_channel span.fblabel
+{
+	vertical-align: top;
+	zoom: 1;
+	*display:inline: ;
+	
+	border-collapse: collapse;
+	border-top-color: rgb(135, 154, 192);
+	border-top-style: solid;
+	border-top-width: 1px;
+	color: rgb(255, 255, 255);
+	cursor: pointer;
+	display: inline-block;
+	font-family: 'Helvetica Neue', Helvetica, Arial, 'lucida grande', tahoma, verdana, arial, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	height: 14px;
+	line-height: 14px;
+	padding-bottom: 3px;
+	padding-left: 6px;
+	padding-right: 6px;
+	padding-top: 2px;
+	text-align: left;
+	white-space: nowrap;
+} 

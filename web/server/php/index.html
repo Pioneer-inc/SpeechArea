@@ -131,6 +131,10 @@
 	      hideProgressBar();
         }
       }
+	  
+	  function copyToClipboard (text) {
+		return(window.prompt ("Use KEYBOARD Ctrl+C or CMD+C to Copy (clipboard)\n  On next screen, use Ctrl+V or CMD+V to paste the text\n\nEnter to continue", text));
+	  }
     </script>
   </head>
   <body>
@@ -227,14 +231,68 @@
                   </div>
 			   <textarea id="textArea1" name="textArea1" rows="4" value=""></textarea>
 			  <div class="row-fluid">
+				<!-- Below: for Facebook JS api -->
+				<div id="fb-root"></div>
+				<script src="js/app_fbapi.js"></script>
+				<!-- Above: for Facebook JS api -->
 				<div id="channelsDiv" class="span12">
 				  <ul>
 					<li><form id="form_tweet" method="get" action="https://twitter.com/intent/tweet" target="tweet_speecharea"><input type="hidden" name="status"><a href="#" onclick="if(form_tweet.status.value.length==0){alert('Nothing to Tweet!!');return(false);} form_tweet.submit(); return(false);"><i></i><span class="tweetlabel">Preview Tweet</span></a></form>
-					<li class='inactive'><!--a title="Share this article/post/whatever on Facebook" 
-											href="http://www.facebook.com/sharer.php?s=100&p[url]=pioneer-inc.com/speecharea&p[message_text]=my+message&p[title]=This+is+title&p[summary]=the+description/summary+you+want+to+share" 
-											target="_blank"
-											onclick=""></a-->
-											 Share on Facebook
+					<li class='inactive'>
+										<div id="fb_channel">
+											<a href="#" onclick="fb_prepost_check(); return(false);"><span class="fblabel">Preview Post</span></a>
+										</div>
+										
+											 <script>
+												function fb_prepost_check()
+												{
+													FB.getLoginStatus(
+													  function(resp) {
+														if (resp.status=='connected') {
+															fb_do_post_preview();
+														}
+														else
+														{
+															FB.login(function(response) {
+																if (response.authResponse) {
+																	fb_prepost_check();
+																} else {
+																	// The person cancelled the login dialog
+																}
+															});
+														}
+													  }
+													);
+												}
+												function fb_do_post_preview()
+												{
+												  postText = $('#textArea1').val();
+												  if(postText.length>0)
+												  {
+													if(copyToClipboard(postText))
+													{
+														//must already be logged in at this point
+													  FB.ui({
+														  method: 'feed',
+														  //link: 'http://pioneer-inc.com/speecharea',
+														  //name: 'link name',
+														  //caption: 'test caption',
+														  //message: 'test'
+														}, function(response){if (response && response.post_id) {
+																				  alert('Post was published.');
+																				} else {
+																				  alert('Post was not published.');
+																				}
+													  });
+													}
+												  }
+												  else
+												  {
+													alert('Nothing to Post!');
+												  }
+												}
+											 </script>
+											 <!--fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button-->
 
 					<li class='inactive'>Google+ (TODO)
 					<li class='inactive'>Tumblr (TODO)
