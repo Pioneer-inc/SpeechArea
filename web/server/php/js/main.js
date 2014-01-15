@@ -35,24 +35,47 @@ function saveAudio() {
 
 function convertAudioToText(data) {
 
-    // Call the rest service here
-
-    //var convertedText = "Placeholder text. ";
+    // Call the rest proxy here
+/*
 	var oReq = new XMLHttpRequest();
-		oReq.open("GET", "mock_response.json", true);
-		oReq.responseType = "json";	//"blob";
-		oReq.onload = function(oEvent) {
-		//alert(oReq.response);
-				var convertedText = oReq.response.Recognition.NBest[0].ResultText;
-				var oldText = "";
-				if (document.getElementById('textArea1').value != null && document.getElementById('textArea1').value != "") {
-					oldText = document.getElementById('textArea1').value + " ";
-				}
-				var newText = oldText + convertedText;
-				document.getElementById('textArea1').value = newText;
-		};
-		oReq.send();// return converted text
-    //return convertedText;
+	oReq.open("GET", "mock_response.txt", true);
+	oReq.responseType = "json";	//"blob";
+	oReq.onload = function(oEvent) {
+	    // alert(oReq.response);
+		var convertedText = oReq.response.Recognition.NBest[0].ResultText;
+		var oldText = "";
+		if (document.getElementById('textArea1').value != null && document.getElementById('textArea1').value != "") {
+			oldText = document.getElementById('textArea1').value + " ";
+		}
+		var newText = oldText + convertedText;
+		document.getElementById('textArea1').value = newText;
+	};
+	oReq.send();// return converted text
+*/
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			hideProgressBar();
+			setTableText(xmlhttp.responseText);
+			var jsonObj = JSON.parse(xmlhttp.responseText);
+			// Problem: Parsing of json works for mock_response.txt but not for proxy response - even though they look same
+			// Also tried different parsing and response types
+			var convertedText = jsonObj.Recognition.NBest[0].ResultText;
+			var oldText = "";
+			if (document.getElementById('textArea1').value != null && document.getElementById('textArea1').value != "") {
+				oldText = document.getElementById('textArea1').value + " ";
+			}
+			var newText = oldText + convertedText;
+			document.getElementById('textArea1').value = newText;
+		} else {
+			setProgressBarText('Speech conversion request failed...');
+		}
+	};
+	setProgressBarText('Sending request...');
+	//xmlhttp.open("GET", "mock_response.txt", true);
+	xmlhttp.open("GET", "speech_proxy.php?ServerFile=BostonCeltics.wav", true); // Can use different ServerFile for testing.
+	//xmlhttp.open("GET", "speech_proxy.php?ServerFile=doctors.wav", true); // Can use different ServerFile for testing.
+	xmlhttp.send();
 }
 
 function drawWave( buffers ) {
