@@ -72,8 +72,8 @@ function convertAudioToText(data) {
 		}
 	};
 	setProgressBarText('Sending request...');
-	//xmlhttp.open("GET", "mock_response.txt", true);
-	xmlhttp.open("GET", "speech_proxy.php?ServerFile=BostonCeltics.wav", true); // Can use different ServerFile for testing.
+	xmlhttp.open("GET", "mock_response.txt", true);
+	//xmlhttp.open("GET", "speech_proxy.php?ServerFile=BostonCeltics.wav", true); // Can use different ServerFile for testing.
 	//xmlhttp.open("GET", "speech_proxy.php?ServerFile=doctors.wav", true); // Can use different ServerFile for testing.
 	xmlhttp.send();
 }
