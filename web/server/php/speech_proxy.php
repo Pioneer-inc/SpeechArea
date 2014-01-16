@@ -1,11 +1,12 @@
+<?php
+/*
 <!-- 
 Licensed by AT&T under 'Software Development Kit Tools Agreement.' September 2011
 TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION: http://developer.att.com/sdk_agreement/
 Copyright 2011 AT&T Intellectual Property. All rights reserved. http://developer.att.com
 For more information contact developer.support@att.com
 -->
-<?php
-
+*/
 header("Content-Type: text/html; charset=ISO-8859-1");
 $api_key = "kdgjx3k1joucj5acmfokbcbtwwfn1miq";
 $secret_key = "vnrpjlrjr57inj5inetscmsmgawtmo1f";
